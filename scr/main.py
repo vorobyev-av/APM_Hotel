@@ -12,13 +12,17 @@ class App(tk.Tk):
 
         self.menu = Menu(self)
         self.main = Main(self)
+        self.view = View(self)
         self.about = About(self)
-
-        # Передача ссылки на экземпляр About в Menu
-        self.menu.set_about_frame(self.about)
 
         # Передача ссылки на экземпляр Main в Menu
         self.menu.set_main_frame(self.main)
+
+        # Передача ссылки на экземпляр View в Menu
+        self.menu.set_view_frame(self.view)
+
+        # Передача ссылки на экземпляр About в Menu
+        self.menu.set_about_frame(self.about)
 
         self.mainloop()
 
@@ -39,7 +43,7 @@ class Menu(ttk.Frame):
         buttonMenu3 = ttk.Button(self, text='Test3')
         buttonMenu3.place(relx=0.27, rely=0.4, relwidth=0.45, height=40)
 
-        buttonMenu4 = ttk.Button(self, text='Test4')
+        buttonMenu4 = ttk.Button(self, text='View', command = self.show_view)
         buttonMenu4.place(relx=0.27, rely=0.5, relwidth=0.45, height=40)
 
         # Кнопка для перехода на экран "About"
@@ -48,6 +52,14 @@ class Menu(ttk.Frame):
 
         buttonMenu6 = ttk.Button(self, text='Main', command=self.show_main)
         buttonMenu6.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
+
+
+    def set_view_frame(self, view_frame):
+        self.view_frame = view_frame
+
+    def show_view(self):
+        self.view_frame.tkraise()
+        self.view_frame.create_test()
 
 
     def set_about_frame(self, about_frame):
@@ -77,6 +89,18 @@ class Main(ttk.Frame):
     def create_test(self):
         buttonMenu5 = ttk.Button(self, text='Test5')
         buttonMenu5.place(relx=0.27, rely=0.9, relwidth=0.45, height=40)
+
+# Класс, описывающий создание области "View"
+class View(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        testLbl = ttk.Label(self, background='purple')
+        testLbl.pack(expand=True, fill='both')
+        self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+
+    def create_test(self):
+        buttonMenu5 = ttk.Button(self, text='view_test')
+        buttonMenu5.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
 # Класс, описывающий создание области "About"
 class About(ttk.Frame):
