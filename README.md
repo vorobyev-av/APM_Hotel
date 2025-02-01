@@ -1,1 +1,1 @@
-apm sqlite v0.4
+apm sqlite v0.5

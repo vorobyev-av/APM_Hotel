@@ -21,9 +21,6 @@ class App(tk.Tk):
         # Передача ссылки на экземпляр Login в Menu
         self.menu.set_login_frame(self.login)
 
-        # Передача ссылки на экземпляр Main в Menu
-        #self.menu.set_main_frame(self.main)
-
         # Передача ссылки на экземпляр View в Menu
         self.menu.set_view_frame(self.view)
 
