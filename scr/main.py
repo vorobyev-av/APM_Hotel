@@ -106,14 +106,34 @@ class Login(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        buttonLoginEnter = ttk.Button(self, text='login')
+        buttonLoginEnter = ttk.Button(self, text='login', command = self.login)
         buttonLoginEnter.place(relx=0.27, rely=0.65, relwidth=0.45, height=40)
 
-        entryLoginLogin = ttk.Entry(self)
-        entryLoginLogin.place(relx=0.27, rely=0.45, relwidth=0.45, height=40)
+        self.entryLoginLogin = ttk.Entry(self)
+        self.entryLoginLogin.place(relx=0.27, rely=0.45, relwidth=0.45, height=40)
 
-        entryLoginPassword = ttk.Entry(self)
-        entryLoginPassword.place(relx=0.27, rely=0.55, relwidth=0.45, height=40)
+        self.entryLoginPassword = ttk.Entry(self, show = '*')
+        self.entryLoginPassword.place(relx=0.27, rely=0.55, relwidth=0.45, height=40)
+
+
+    def login(self):
+        conn = sqlite3.connect('hotel.db')
+        cursor = conn.cursor()
+
+        username = self.entryLoginLogin.get()
+        password = self.entryLoginPassword.get()
+
+        cursor.execute('SELECT * FROM Users WHERE name = ? AND password = ?;', (username, password))
+        user = cursor.fetchone()
+
+        if user:
+            labelLoginCheckOn = tk.Label(self, text = 'Успешный вход', fg = 'green', bg = 'blue')
+            labelLoginCheckOn.place(relx=0.27, rely=0.85, relwidth=0.45, height=40)
+        else:
+            labelLoginCheckOff = tk.Label(self, text = 'Ошибка входа', fg = 'red')
+            labelLoginCheckOff.place(relx=0.27, rely=0.85, relwidth=0.45, height=40)
+
+        conn.close()
 
 
 # Класс, описывающий создание области "View"
