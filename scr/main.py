@@ -15,12 +15,23 @@ class App(tk.Tk):
         #self.main = Main(self)
         self.view = View(self)
         self.about = About(self)
+        self.clients = Clients(self)
+        self.rent = Rent(self)
+        self.room = Room(self)
         self.login = Login(self)
-
 
         # Передача ссылки на экземпляр Login в Menu
         self.menu.set_login_frame(self.login)
 
+        # Передача ссылки на экземпляр Clients в Menu
+        self.menu.set_clients_frame(self.clients)
+
+        # Передача ссылки на экземпляр Rent в Menu
+        self.menu.set_rent_frame(self.rent)
+       
+        # Передача ссылки на экземпляр Room в Menu
+        self.menu.set_room_frame(self.room)
+        
         # Передача ссылки на экземпляр View в Menu
         self.menu.set_view_frame(self.view)
 
@@ -38,9 +49,49 @@ class Clients(ttk.Frame):
         testLbl.pack(expand=True, fill='both')
         self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
         self.create_test()
+        self.create_widgets()
 
     def create_test(self):
-        buttonMenu5 = ttk.Button(self, text='login')
+        buttonMenu5 = ttk.Button(self, text='clients')
+        buttonMenu5.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
+
+    def create_widgets(self):
+        buttonNewClient = ttk.Button(self, text='Новый клиент')
+        buttonNewClient.place(relx=0.1, rely=0.1, relwidth=0.10, height=40)
+
+        buttonEdit = ttk.Button(self, text='Изменить')
+        buttonEdit.place(relx=0.3, rely=0.1, relwidth=0.10, height=40)
+
+        buttonDelete = ttk.Button(self, text='Удалить')
+        buttonDelete.place(relx=0.5, rely=0.1, relwidth=0.10, height=40)
+
+
+
+# Класс, описывающий создание области БРОНИРОВАНИЕ
+class Rent(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        testLbl = ttk.Label(self, background='yellow')
+        testLbl.pack(expand=True, fill='both')
+        self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+        self.create_test()
+
+    def create_test(self):
+        buttonMenu5 = ttk.Button(self, text='rent')
+        buttonMenu5.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
+
+
+# Класс, описывающий создание области БРОНИРОВАНИЕ
+class Room(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        testLbl = ttk.Label(self, background='brown')
+        testLbl.pack(expand=True, fill='both')
+        self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+        self.create_test()
+
+    def create_test(self):
+        buttonMenu5 = ttk.Button(self, text='room')
         buttonMenu5.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
 
@@ -52,23 +103,23 @@ class Menu(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.buttonMenu1 = ttk.Button(self, text='Test1')
+        self.buttonMenu1 = ttk.Button(self, text='Клиенты', command=self.show_clients)
         self.buttonMenu1.place(relx=0.27, rely=0.2, relwidth=0.45, height=40)
 
-        self.buttonMenu2 = ttk.Button(self, text='Test2')
+        self.buttonMenu2 = ttk.Button(self, text='Бронирование', command=self.show_rent)
         self.buttonMenu2.place(relx=0.27, rely=0.3, relwidth=0.45, height=40)
 
-        self.buttonMenu3 = ttk.Button(self, text='Test3')
+        self.buttonMenu3 = ttk.Button(self, text='Номерной фонд', command=self.show_room)
         self.buttonMenu3.place(relx=0.27, rely=0.4, relwidth=0.45, height=40)
 
-        self.buttonMenu4 = ttk.Button(self, text='View', command = self.show_view)
+        self.buttonMenu4 = ttk.Button(self, text='Справочники', command = self.show_view)
         self.buttonMenu4.place(relx=0.27, rely=0.5, relwidth=0.45, height=40)
 
         # Кнопка для перехода на экран "About"
-        self.buttonMenu5 = ttk.Button(self, text='About', command=self.show_about)
+        self.buttonMenu5 = ttk.Button(self, text='О программе', command=self.show_about)
         self.buttonMenu5.place(relx=0.27, rely=0.9, relwidth=0.45, height=40)
 
-        self.buttonMenu6 = ttk.Button(self, text='Login', command=self.show_login)
+        self.buttonMenu6 = ttk.Button(self, text='Вход', command=self.show_login)
         self.buttonMenu6.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
         self.disable_buttons()
@@ -89,6 +140,7 @@ class Menu(ttk.Frame):
         self.buttonMenu5.config(state='active')
         self.buttonMenu6.config(state='active')
 
+
     def set_view_frame(self, view_frame):
         self.view_frame = view_frame
 
@@ -101,7 +153,28 @@ class Menu(ttk.Frame):
 
     def show_about(self):
         self.about_frame.tkraise()
-        
+
+
+    def set_clients_frame(self, clients_frame):
+        self.clients_frame = clients_frame
+
+    def show_clients(self):
+        self.clients_frame.tkraise()
+
+
+    def set_rent_frame(self, rent_frame):
+        self.rent_frame = rent_frame
+
+    def show_rent(self):
+        self.rent_frame.tkraise()
+
+
+    def set_room_frame(self, room_frame):
+        self.room_frame = room_frame
+
+    def show_room(self):
+        self.room_frame.tkraise()
+
 
     def set_login_frame(self, login_frame):
         self.login_frame = login_frame
