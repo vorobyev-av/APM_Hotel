@@ -52,25 +52,42 @@ class Menu(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        buttonMenu1 = ttk.Button(self, text='Test1')
-        buttonMenu1.place(relx=0.27, rely=0.2, relwidth=0.45, height=40)
+        self.buttonMenu1 = ttk.Button(self, text='Test1')
+        self.buttonMenu1.place(relx=0.27, rely=0.2, relwidth=0.45, height=40)
 
-        buttonMenu2 = ttk.Button(self, text='Test2')
-        buttonMenu2.place(relx=0.27, rely=0.3, relwidth=0.45, height=40)
+        self.buttonMenu2 = ttk.Button(self, text='Test2')
+        self.buttonMenu2.place(relx=0.27, rely=0.3, relwidth=0.45, height=40)
 
-        buttonMenu3 = ttk.Button(self, text='Test3')
-        buttonMenu3.place(relx=0.27, rely=0.4, relwidth=0.45, height=40)
+        self.buttonMenu3 = ttk.Button(self, text='Test3')
+        self.buttonMenu3.place(relx=0.27, rely=0.4, relwidth=0.45, height=40)
 
-        buttonMenu4 = ttk.Button(self, text='View', command = self.show_view)
-        buttonMenu4.place(relx=0.27, rely=0.5, relwidth=0.45, height=40)
+        self.buttonMenu4 = ttk.Button(self, text='View', command = self.show_view)
+        self.buttonMenu4.place(relx=0.27, rely=0.5, relwidth=0.45, height=40)
 
         # Кнопка для перехода на экран "About"
-        buttonMenu5 = ttk.Button(self, text='About', command=self.show_about)
-        buttonMenu5.place(relx=0.27, rely=0.9, relwidth=0.45, height=40)
+        self.buttonMenu5 = ttk.Button(self, text='About', command=self.show_about)
+        self.buttonMenu5.place(relx=0.27, rely=0.9, relwidth=0.45, height=40)
 
-        buttonMenu6 = ttk.Button(self, text='Login', command=self.show_login)
-        buttonMenu6.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
+        self.buttonMenu6 = ttk.Button(self, text='Login', command=self.show_login)
+        self.buttonMenu6.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
+        self.disable_buttons()
+
+    def disable_buttons(self):
+        self.buttonMenu1.config(state='disabled')
+        self.buttonMenu2.config(state='disabled')
+        self.buttonMenu3.config(state='disabled')
+        self.buttonMenu4.config(state='disabled')
+        self.buttonMenu5.config(state='disabled')
+        self.buttonMenu6.config(state='disabled')
+
+    def enable_buttons(self):
+        self.buttonMenu1.config(state='active')
+        self.buttonMenu2.config(state='active')
+        self.buttonMenu3.config(state='active')
+        self.buttonMenu4.config(state='active')
+        self.buttonMenu5.config(state='active')
+        self.buttonMenu6.config(state='active')
 
     def set_view_frame(self, view_frame):
         self.view_frame = view_frame
@@ -126,6 +143,10 @@ class Login(ttk.Frame):
         if user:
             labelLoginCheckOn = tk.Label(self, text = 'Успешный вход', fg = 'green', bg = 'blue')
             labelLoginCheckOn.place(relx=0.27, rely=0.85, relwidth=0.45, height=40)
+            
+            # Включение кнопок меню после успешного входа
+            self.master.menu.enable_buttons()
+
         else:
             labelLoginCheckOff = tk.Label(self, text = 'Ошибка входа', fg = 'red')
             labelLoginCheckOff.place(relx=0.27, rely=0.85, relwidth=0.45, height=40)
