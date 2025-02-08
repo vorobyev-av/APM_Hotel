@@ -50,6 +50,9 @@ class Clients(ttk.Frame):
         self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
         self.create_test()
         self.create_widgets()
+        self.fetch_data()
+        self.display_data()
+
 
     def create_test(self):
         buttonMenu5 = ttk.Button(self, text='clients')
@@ -65,6 +68,46 @@ class Clients(ttk.Frame):
         buttonDelete = ttk.Button(self, text='Удалить')
         buttonDelete.place(relx=0.5, rely=0.1, relwidth=0.10, height=40)
 
+        buttonRefresh = ttk.Button(self, text='Обновить', command=self.refresh_data)
+        buttonRefresh.place(relx=0.5, rely=0.8, relwidth=0.10, height=40)
+
+        self.columns = ("ID", "ФИО", "Контакт", "Паспорт", "Дата рождения")
+        self.tree = ttk.Treeview(self, columns=self.columns, show="headings")
+        for col in self.columns:
+            self.tree.heading(col, text=col)
+        self.tree.pack(expand=True)
+
+        self.tree.column("#1", stretch=True, width=30, anchor='c')
+        self.tree.column("#2", stretch=True, minwidth=200, anchor='c')
+        self.tree.column("#3", stretch=True, width=130, anchor='c')
+        self.tree.column("#4", stretch=True, width=130, anchor='c')
+        self.tree.column("#5", stretch=True, width=130, anchor='c')
+
+        '''
+        tree.heading("ID", text="ID")
+        tree.heading("ФИО", text="ФИО")
+        tree.heading("Контакт", text="Контакт")
+        tree.heading("Паспорт", text="Паспорт")
+        tree.heading("Дата рождения", text="Дата рождения")
+        tree.pack(fill="both", expand=True)
+        '''
+
+    def fetch_data(self):
+        conn = sqlite3.connect('hotel.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Clients")
+        self.rows = cursor.fetchall()
+        conn.close()
+
+    def display_data(self):
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+        for row in self.rows:
+            self.tree.insert("", "end", values=row)
+
+    def refresh_data(self):
+        self.fetch_data()
+        self.display_data()
 
 
 # Класс, описывающий создание области БРОНИРОВАНИЕ
@@ -196,11 +239,14 @@ class Login(ttk.Frame):
         buttonLoginEnter = ttk.Button(self, text='login', command = self.login)
         buttonLoginEnter.place(relx=0.27, rely=0.65, relwidth=0.45, height=40)
 
+        #buttonLoginEnter.bind = ('<Return>', self.login)
+
         self.entryLoginLogin = ttk.Entry(self)
         self.entryLoginLogin.place(relx=0.27, rely=0.45, relwidth=0.45, height=40)
 
         self.entryLoginPassword = ttk.Entry(self, show = '*')
         self.entryLoginPassword.place(relx=0.27, rely=0.55, relwidth=0.45, height=40)
+
 
 
     def login(self):
@@ -254,4 +300,4 @@ class About(ttk.Frame):
         buttonMenu5.place(relx=0.27, rely=0.9, relwidth=0.45, height=40)
 
 # Создание экземпляра класса
-App('АРМ Космос', (800, 600))
+App('АРМ Космос', (1000, 600))
