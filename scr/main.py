@@ -2,6 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 import sqlite3
+import sys, os
+from datetime import datetime
+import locale
+
+locale.setlocale(locale.LC_TIME, 'russian')
 
 # Класс, описывающий создание окна приложения
 class App(tk.Tk):
@@ -10,6 +15,7 @@ class App(tk.Tk):
         self.title(title)
         self.geometry(f'{size[0]}x{size[1]}')
         self.minsize(size[0], size[1])
+
 
         self.menu = Menu(self)
         #self.main = Main(self)
@@ -38,6 +44,11 @@ class App(tk.Tk):
         # Передача ссылки на экземпляр About в Menu
         self.menu.set_about_frame(self.about)
 
+        style = ttk.Style(self)
+        style.theme_use('classic')
+        style.configure('TButton', background = 'red', foreground = 'white', width = 20, borderwidth=1, focusthickness=3, focuscolor='none')
+        style.map('TButton', background=[('active','#E8B4BC')])
+
         self.mainloop()
 
 
@@ -46,7 +57,8 @@ class Clients(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         testLbl = ttk.Label(self, background='black')
-        testLbl.pack(expand=True, fill='both')
+        #testLbl.pack(expand=True, fill='both')
+        testLbl.place(height=999, width=999)
         self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
         self.create_test()
         self.create_widgets()
@@ -142,8 +154,12 @@ class Room(ttk.Frame):
 class Menu(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        testLbl = ttk.Label(self, background='#620410')
+        testLbl.pack(expand=True, fill='both')
         self.place(x=0, y=0, relwidth=0.3, relheight=1)
         self.create_widgets()
+        self.update_time()
+        
 
     def create_widgets(self):
         self.buttonMenu1 = ttk.Button(self, text='Клиенты', command=self.show_clients)
@@ -165,24 +181,48 @@ class Menu(ttk.Frame):
         self.buttonMenu6 = ttk.Button(self, text='Вход', command=self.show_login)
         self.buttonMenu6.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
+
+        labelHide_image_path = os.path.join(sys.path[0], '../img/test.png')
+
+        imageHide = Image.open(labelHide_image_path)
+        #imageHide = imageHide.resize((200, 200))
+        self.tk_image_hide = ImageTk.PhotoImage(imageHide)
+        
+        self.labelHide = ttk.Label(self, image=self.tk_image_hide)
+        self.labelHide.place(relx=0.27, rely=0.2, relwidth=0.45, height=30)
+        #self.labelHide.pack()
+
         self.disable_buttons()
 
+        # Label для отображения даты и времени
+        self.time_label1 = ttk.Label(self, font=("Arial", 10, "bold"), background="#620410", foreground="yellow")
+        self.time_label1.place(relx=0.1, rely=0.05, relwidth=0.8, height=30)
+
+        self.time_label2 = ttk.Label(self, font=("Arial", 10, "bold"), background="#620410", foreground="yellow")
+        self.time_label2.place(relx=0.1, rely=0.10, relwidth=0.8, height=30)
+
+        self.time_label3 = ttk.Label(self, font=("Arial", 12, "bold"), background="#620410", foreground="yellow")
+        self.time_label3.place(relx=0.1, rely=0.15, relwidth=0.8, height=30)
+
+    def update_time(self):
+        # Получаем текущую дату и время
+        now = datetime.now()
+        # Форматируем дату и время
+        current_time1 = now.strftime("%d.%m.%Y").title()
+        current_time2 = now.strftime("%A").title()
+        current_time3 = now.strftime("%H:%M:%S").title()
+        # Обновляем текст в Label
+        self.time_label1.config(text=current_time1)
+        self.time_label2.config(text=current_time2)
+        self.time_label3.config(text=current_time3)
+        # Вызываем эту функцию снова через 1000 мс (1 секунду)
+        self.after(1000, self.update_time)
+
     def disable_buttons(self):
-        self.buttonMenu1.config(state='disabled')
-        self.buttonMenu2.config(state='disabled')
-        self.buttonMenu3.config(state='disabled')
-        self.buttonMenu4.config(state='disabled')
-        self.buttonMenu5.config(state='disabled')
-        self.buttonMenu6.config(state='disabled')
+        self.labelHide.state(['disabled'])
 
     def enable_buttons(self):
-        self.buttonMenu1.config(state='active')
-        self.buttonMenu2.config(state='active')
-        self.buttonMenu3.config(state='active')
-        self.buttonMenu4.config(state='active')
-        self.buttonMenu5.config(state='active')
-        self.buttonMenu6.config(state='active')
-
+        self.labelHide.place(x=1, y=1, width=100, height=100)
 
     def set_view_frame(self, view_frame):
         self.view_frame = view_frame
@@ -236,6 +276,14 @@ class Login(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        labelLogo_image_path = os.path.join(sys.path[0], '../img/test.jpg')
+
+        imageLogo = Image.open(labelLogo_image_path)
+        self.tk_image_logo = ImageTk.PhotoImage(imageLogo)
+        
+        self.labelLogo = ttk.Label(self, image=self.tk_image_logo)
+        self.labelLogo.place(x=1, y=1, width=100, height=100)
+
         buttonLoginEnter = ttk.Button(self, text='login', command = self.login)
         buttonLoginEnter.place(relx=0.27, rely=0.65, relwidth=0.45, height=40)
 
@@ -247,7 +295,7 @@ class Login(ttk.Frame):
         self.entryLoginPassword = ttk.Entry(self, show = '*')
         self.entryLoginPassword.place(relx=0.27, rely=0.55, relwidth=0.45, height=40)
 
-
+        
 
     def login(self):
         conn = sqlite3.connect('hotel.db')
