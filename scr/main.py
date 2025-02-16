@@ -44,6 +44,7 @@ class App(tk.Tk):
         # Передача ссылки на экземпляр About в Menu
         self.menu.set_about_frame(self.about)
 
+
         style = ttk.Style(self)
         style.theme_use('classic')
         style.configure('TButton', background = 'red', foreground = 'white', width = 20, borderwidth=1, focusthickness=3, focuscolor='none')
@@ -60,15 +61,10 @@ class Clients(ttk.Frame):
         #testLbl.pack(expand=True, fill='both')
         testLbl.place(height=999, width=999)
         self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
-        self.create_test()
         self.create_widgets()
         self.fetch_data()
         self.display_data()
 
-
-    def create_test(self):
-        buttonMenu5 = ttk.Button(self, text='clients')
-        buttonMenu5.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
     def create_widgets(self):
         buttonNewClient = ttk.Button(self, text='Новый клиент')
@@ -182,17 +178,17 @@ class Menu(ttk.Frame):
         self.buttonMenu6.place(relx=0.27, rely=0.8, relwidth=0.45, height=40)
 
 
-        labelHide_image_path = os.path.join(sys.path[0], '../img/test.png')
+        labelHide_image_path = os.path.join(sys.path[0], '../img/test2.png')
 
         imageHide = Image.open(labelHide_image_path)
         #imageHide = imageHide.resize((200, 200))
         self.tk_image_hide = ImageTk.PhotoImage(imageHide)
         
-        self.labelHide = ttk.Label(self, image=self.tk_image_hide)
-        self.labelHide.place(relx=0.27, rely=0.2, relwidth=0.45, height=30)
+        self.labelHide = ttk.Label(self, image=self.tk_image_hide, relief='solid')
+        self.labelHide.place(relx=0.27, rely=0.2, relwidth=0.45, height=250)
         #self.labelHide.pack()
 
-        self.disable_buttons()
+        #self.disable_buttons()
 
         # Label для отображения даты и времени
         self.time_label1 = ttk.Label(self, font=("Arial", 10, "bold"), background="#620410", foreground="yellow")
@@ -219,7 +215,8 @@ class Menu(ttk.Frame):
         self.after(1000, self.update_time)
 
     def disable_buttons(self):
-        self.labelHide.state(['disabled'])
+        #self.labelHide.state(['disabled'])
+        self.labelHide.destroy()
 
     def enable_buttons(self):
         self.labelHide.place(x=1, y=1, width=100, height=100)
@@ -276,7 +273,7 @@ class Login(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        labelLogo_image_path = os.path.join(sys.path[0], '../img/test.jpg')
+        labelLogo_image_path = os.path.join(sys.path[0], '../img/test.png')
 
         imageLogo = Image.open(labelLogo_image_path)
         self.tk_image_logo = ImageTk.PhotoImage(imageLogo)
@@ -312,7 +309,7 @@ class Login(ttk.Frame):
             labelLoginCheckOn.place(relx=0.27, rely=0.85, relwidth=0.45, height=40)
             
             # Включение кнопок меню после успешного входа
-            self.master.menu.enable_buttons()
+            self.master.menu.disable_buttons()
 
         else:
             labelLoginCheckOff = tk.Label(self, text = 'Ошибка входа', fg = 'red')
